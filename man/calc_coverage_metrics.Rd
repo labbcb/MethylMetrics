@@ -30,7 +30,7 @@ It inputs a \link[bsseq:BSseq]{bsseq::BSseq} object, zero or more chromosomes
 }
 \details{
 The \code{regions_list} must be a names list of data frames and
-\link[GenomicRanges:GRanges-class]{GenomicRanges::GRanges} objects. Names of list elements are used to
+\link[GenomicRanges:GRanges]{GenomicRanges::GRanges} objects. Names of list elements are used to
 differentiate metrics from one set of regions to others (column \code{type}).
 
 If \code{chrs} or \code{regions_list} is not provided it will not calculate for these

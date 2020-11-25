@@ -1,0 +1,3 @@
+#' MethylMetrics
+#' @importFrom magrittr %>%
+NULL
