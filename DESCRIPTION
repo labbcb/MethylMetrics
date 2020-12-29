@@ -18,4 +18,5 @@ Imports:
     magrittr,
     dplyr,
     tibble,
-    purrr
+    purrr,
+    ggplot2

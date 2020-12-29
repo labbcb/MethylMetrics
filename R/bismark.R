@@ -16,8 +16,6 @@
 #' 
 #' @export
 #' @md
-#'
-#' @examples
 read_bismark_mbias <- function(file) {
   data <- readr::read_lines(file)
   
@@ -54,8 +52,6 @@ read_bismark_mbias <- function(file) {
 #' @return ggplot2 object
 #' @export
 #' @md
-#'
-#' @examples
 plot_mbias <- function(mbias) {
   p <- mbias %>%
     ggplot(aes(x = Cycle, y = Percent.Methylation, color = Context)) +
@@ -82,7 +78,6 @@ plot_mbias <- function(mbias) {
 #' @export
 #' @md
 #'
-#' @examples
 read_bismark_genomic_nucleotide_frequencies <- function(file) {
   readr::read_tsv(file, col_names = c("Bases", "Count")) %>%
     dplyr::mutate(Type = ifelse(Bases %in% c("A", "C", "G", "T"), "Nucleotide", "Dinucleotide")) %>%
@@ -101,7 +96,6 @@ read_bismark_genomic_nucleotide_frequencies <- function(file) {
 #' @return
 #' @export
 #'
-#' @examples
 plot_genomic_nucleotide_frequencies <- function(genomic_nucleotide_frequencies, show = c("Nucleotide", "Dinucleotide")) {
   genomic_nucleotide_frequencies %>%
     filter(Type %in% show) %>%
@@ -110,6 +104,12 @@ plot_genomic_nucleotide_frequencies <- function(genomic_nucleotide_frequencies, 
       labs(x = "Bases")
 }
 
+#' Read Bismark nucleotide coverage
+#'
+#' @param file 
+#'
+#' @return
+#' @export
 read_bismark_nucleotide_coverage <- function(file) {
   readr::read_tsv(file) %>%
     dplyr::rename("Bases" = "(di-)nucleotide", 
@@ -121,6 +121,14 @@ read_bismark_nucleotide_coverage <- function(file) {
     dplyr::mutate(Type = ifelse(Bases %in% c("A", "C", "G", "T"), "Nucleotide", "Dinucleotide"))
 }
 
+
+#' Plot Bismark nucleotide coverage
+#'
+#' @param nucleotide_coverage 
+#' @param show 
+#'
+#' @return
+#' @export
 plot_bismark_nucleotide_coverage <- function(nucleotide_coverage, show = c("Nucleotide", "Dinucleotide")) {
   nucleotide_coverage %>%
     filter(Type %in% show) %>%
