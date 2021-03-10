@@ -138,3 +138,55 @@ plot_bismark_nucleotide_coverage <- function(nucleotide_coverage, show = c("Nucl
       geom_col(position = "dodge") + 
     labs(x = "Bases", y = "%")
 }
+
+#' Read Bismark alignment report file
+#'
+#' @param file Path to Bismark alignment report file
+#'
+#' @return data frame with the following columns:
+#' * Reads:
+#' * Unique.Hits:
+#' * No.Hits:
+#' * Multiple.Hits:
+#' * Not.Extracted:
+#' * OT:
+#' * OB:
+#' * CTOT:
+#' * CTOB:
+#' * C:
+#' * CpG.Methylated:
+#' * CHG.Methylated:
+#' * CHH.Methylated:
+#' * Unknown.Methylated:
+#' * CpG.Unmethylated:
+#' * CHG.Unmethylated:
+#' * CHH.Unmethylated:
+#' * Unknown_Unmethylated:
+#' 
+#' @export
+#' @md
+read_bismark_align_report <- function(file) {
+  tibble(text = read_file(file)) %>%
+    mutate(
+      Reads = str_match(., "total:\\t(\\d+)\\n")[2],
+      Unique.Hits = str_match(., "alignments:\\t(\\d+)\\n")[2],
+      No.Hits = str_match(., "condition:\\t(\\d+)\\n")[2],
+      Multiple.Hits = str_match(., "uniquely:\\t(\\d+)\\n")[2],
+      Not.Extracted = str_match(., "extracted:\\t(\\d+)\\n")[2],
+      OT = str_match(., "CT/CT:\\t(\\d+)\\t")[2],
+      OB = str_match(., "CT/GA:\\t(\\d+)\\t")[2],
+      CTOT = str_match(., "GA/CT:\\t(\\d+)\\t")[2],
+      CTOB = str_match(., "GA/GA:\\t(\\d+)\\t")[2],
+      C = str_match(., "analysed:\\t(\\d+)\\n")[2],
+      CpG.Methylated = str_match(., "methylated.+CpG.+:\\t(\\d+)\\n")[2],
+      CHG.Methylated = str_match(., "methylated.+CHG.+:\\t(\\d+)\\n")[2],
+      CHH.Methylated = str_match(., "methylated.+CHH.+:\\t(\\d+)\\n")[2],
+      Unknown.Methylated = str_match(., "methylated.+Unknown.+:\\t(\\d+)\\n")[2],
+      CpG.Unmethylated = str_match(., "unmethylated.+CpG.+:\\t(\\d+)\\n")[2],
+      CHG.Unmethylated = str_match(., "unmethylated.+CHG.+:\\t(\\d+)\\n")[2],
+      CHH.Unmethylated = str_match(., "unmethylated.+CHH.+:\\t(\\d+)\\n")[2],
+      Unknown_Unmethylated = str_match(., "unmethylated.+Unknown.+:\\t(\\d+)\\n")[2]
+    ) %>%
+    select(-text) %>%
+    mutate(across(everything(), as.numeric))
+}
