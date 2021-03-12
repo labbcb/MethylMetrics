@@ -31,7 +31,7 @@ read_bismark_mbias <- function(file) {
       dplyr::rename(Cycle = position, Count.Methylated = "count methylated", 
              Count.Unmethylated = "count unmethylated",
              Percent.Methylation = "% methylation", Coverage = coverage) %>%
-      tibble::add_column(Context = context, Strand = strand, .before = "Cycle")
+      tibble::add_column(Strand = strand, Context = context, .before = "Cycle")
   })
 }
 
