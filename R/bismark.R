@@ -169,7 +169,7 @@ read_bismark_align_report <- function(file) {
   tibble(text = read_file(file)) %>%
     mutate(
       Reads = str_match(., "total:\\t(\\d+)\\n")[2],
-      Unique.Hits = str_match(., "alignments:\\t(\\d+)\\n")[2],
+      Unique.Hits = str_match(., "best hit:\\t(\\d+)\\n")[2],
       No.Hits = str_match(., "condition:\\t(\\d+)\\n")[2],
       Multiple.Hits = str_match(., "uniquely:\\t(\\d+)\\n")[2],
       Not.Extracted = str_match(., "extracted:\\t(\\d+)\\n")[2],
@@ -185,7 +185,27 @@ read_bismark_align_report <- function(file) {
       CpG.Unmethylated = str_match(., "unmethylated.+CpG.+:\\t(\\d+)\\n")[2],
       CHG.Unmethylated = str_match(., "unmethylated.+CHG.+:\\t(\\d+)\\n")[2],
       CHH.Unmethylated = str_match(., "unmethylated.+CHH.+:\\t(\\d+)\\n")[2],
-      Unknown_Unmethylated = str_match(., "unmethylated.+Unknown.+:\\t(\\d+)\\n")[2]
+      Unknown.Unmethylated = str_match(., "unmethylated.+Unknown.+:\\t(\\d+)\\n")[2]
+    ) %>%
+    select(-text) %>%
+    mutate(across(everything(), as.numeric))
+}
+
+#' Read Bismark deduplicate report file
+#'
+#' @param file 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+read_bismark_deduplicate_report <- function(file) {
+  tibble(text = read_file(file)) %>%
+    mutate(
+      Alignments = str_match(., "analysed in .+\\t(\\d+)\\n")[2],
+      Removed = str_match(., "removed:\\t(\\d+)\\s")[2],
+      Duplicate.Positions = str_match(., "found at:\\t(\\d+)\\s")[2],
+      Filtered = str_match(., "leftover sequences:\\s+(\\d+)\\s")[2],
     ) %>%
     select(-text) %>%
     mutate(across(everything(), as.numeric))
