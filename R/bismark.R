@@ -169,7 +169,7 @@ read_bismark_align_report <- function(file) {
   tibble(text = read_file(file)) %>%
     mutate(
       Reads = str_match(., "total:\\t(\\d+)\\n")[2],
-      Unique.Hits = str_match(., "best hit:\\t(\\d+)\\n")[2],
+      Unique.Hits = str_match(., "(best hit|alignments):\\t(\\d+)\\n")[3],
       No.Hits = str_match(., "condition:\\t(\\d+)\\n")[2],
       Multiple.Hits = str_match(., "uniquely:\\t(\\d+)\\n")[2],
       Not.Extracted = str_match(., "extracted:\\t(\\d+)\\n")[2],
