@@ -197,8 +197,7 @@ read_bismark_align_report <- function(file) {
 #'
 #' @return
 #' @export
-#'
-#' @examples
+#' @md
 read_bismark_deduplicate_report <- function(file) {
   tibble(text = read_file(file)) %>%
     mutate(
@@ -206,6 +205,30 @@ read_bismark_deduplicate_report <- function(file) {
       Removed = str_match(., "removed:\\t(\\d+)\\s")[2],
       Duplicate.Positions = str_match(., "found at:\\t(\\d+)\\s")[2],
       Filtered = str_match(., "leftover sequences:\\s+(\\d+)\\s")[2],
+    ) %>%
+    select(-text) %>%
+    mutate(across(everything(), as.numeric))
+}
+
+#' Read Bismark methylation extractor report file
+#'
+#' @param file 
+#'
+#' @return
+#' @export
+#' @md
+read_bismark_methylation_extractor <- function(file) {
+  tibble(text = read_file(file)) %>%
+    mutate(
+      Reads = str_match(., "Processed (\\d+) lines in total")[2],
+      Valid.Reads = str_match(., "strings processed: (\\d+)")[2],
+      Total.C = str_match(., "Total number of C's analysed:\\s+(\\d+)")[2],
+      CpG.Methylated = str_match(., "Total methylated C's in CpG context:\\s+(\\d+)")[2],
+      CHG.Methylated = str_match(., "Total methylated C's in CHG context:\\s+(\\d+)")[2],
+      CHH.Methylated = str_match(., "Total methylated C's in CHH context:\\s+(\\d+)")[2],
+      CpG.Unmethylated = str_match(., "Total C to T conversions in CpG context:\\s+(\\d+)")[2],
+      CHG.Unmethylated = str_match(., "Total C to T conversions in CHG context:\\s+(\\d+)")[2],
+      CHH.Unmethylated = str_match(., "Total C to T conversions in CHH context:\\s+(\\d+)")[2]
     ) %>%
     select(-text) %>%
     mutate(across(everything(), as.numeric))
